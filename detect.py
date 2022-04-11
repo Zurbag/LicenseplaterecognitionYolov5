@@ -47,19 +47,27 @@ from utils.torch_utils import select_device, time_sync
 
 
 @torch.no_grad()
-def run(weights=ROOT / 'yolov5s.pt',  # model.pt path(s)
+def run(
+        # weights=ROOT / 'yolov5s.pt',  # model.pt path(s)
+        weights=ROOT / 'best.pt',  # model.pt path(s)
         source=ROOT / 'data/images',  # file/dir/URL/glob, 0 for webcam
+        # data=ROOT / 'data/coco128.yaml',  # dataset.yaml path
         data=ROOT / 'data/coco128.yaml',  # dataset.yaml path
-        imgsz=(640, 640),  # inference size (height, width)
+        #imgsz=(640, 640),  # inference size (height, width) # Оригинал
+        imgsz=(416, 416),  # inference size (height, width) # Сычёв
         conf_thres=0.25,  # confidence threshold
         iou_thres=0.45,  # NMS IOU threshold
         max_det=1000,  # maximum detections per image
         device='',  # cuda device, i.e. 0 or 0,1,2,3 or cpu
-        view_img=False,  # show results
+
+        # view_img=True,  # show results #Оригинал
+        view_img=False,  # Показывать распознаные классы #Сычёв
         save_txt=False,  # save results to *.txt
         save_conf=False,  # save confidences in --save-txt labels
-        save_crop=False,  # save cropped prediction boxes
-        nosave=False,  # do not save images/videos
+        # save_crop=False,  # save cropped prediction boxes #Оригинал
+        save_crop=True,  # Вырезает изображения в файлы #Сычев
+        # nosave=False Оригинал
+        nosave=False,  # do not save images/videos # Сычёв
         classes=None,  # filter by class: --class 0, or --class 0 2 3
         agnostic_nms=False,  # class-agnostic NMS
         augment=False,  # augmented inference
@@ -73,7 +81,7 @@ def run(weights=ROOT / 'yolov5s.pt',  # model.pt path(s)
         hide_conf=False,  # hide confidences
         half=False,  # use FP16 half-precision inference
         dnn=False,  # use OpenCV DNN for ONNX inference
-        ):
+):
     source = str(source)
     save_img = not nosave and not source.endswith('.txt')  # save inference images
     is_file = Path(source).suffix[1:] in (IMG_FORMATS + VID_FORMATS)
